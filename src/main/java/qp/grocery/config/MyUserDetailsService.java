@@ -26,13 +26,14 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         User u = userRepository.findByName(username).orElse(null);
 
         if(u == null) {
             throw new UsernameNotFoundException("No user found for the given username");
         }
 
-        String userRole = userRoleRepository.findByUserId(u.getId()).get().getRole().toString();
+        String userRole = userRoleRepository.findByUserId(u.getUserId()).get().getRole().toString();
 
         return getUserDetails(u, userRole);
     }

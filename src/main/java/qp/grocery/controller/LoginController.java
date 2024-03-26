@@ -23,6 +23,7 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest) {
+        System.out.println(loginRequest.getUsername());
         Map<String, String> tokens = authenticationService.authenticateUser(loginRequest.getUsername(),
                 loginRequest.getPassword());
 

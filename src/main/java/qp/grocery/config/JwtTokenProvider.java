@@ -29,10 +29,7 @@ public class JwtTokenProvider {
     @Value("${jwt.refresh.expiration}")
     private int jwtRefreshTokenExpirationInMs;
 
-    @PostConstruct
-    protected void init() {
-        jwtSecret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
-    }
+    private String secretKey = "this_is_a_new_test_for_auth";
 
     public String generateToken(String username, String role) {
         Date date = new Date();
@@ -43,7 +40,8 @@ public class JwtTokenProvider {
                 .claim("role", role)
                 .setIssuedAt(date)
                 .setExpiration(expiryDate)
-                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS512)
+                .signWith(Keys.hmacShaKeyFor((Keys.secretKeyFor(SignatureAlgorithm.HS256) + Base64.getEncoder().encodeToString(jwtSecret.getBytes())).getBytes()),
+                        SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -56,7 +54,8 @@ public class JwtTokenProvider {
                 .addClaims(claims)
                 .setIssuedAt(date)
                 .setExpiration(expiryDate)
-                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS512)
+                .signWith(Keys.hmacShaKeyFor((Keys.secretKeyFor(SignatureAlgorithm.HS256) + Base64.getEncoder().encodeToString(jwtSecret.getBytes())).getBytes()),
+                        SignatureAlgorithm.HS256)
                 .compact();
     }
 

@@ -1,5 +1,6 @@
 package qp.grocery.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,24 +21,29 @@ public class AuthenticationService {
     constructor to be used for dependency injection.
     In such cases, you don't necessarily need to explicitly use @Autowired on the constructor.
      */
-    private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
-    private final JwtTokenProvider jwtTokenProvider;
+//    private final AuthenticationManager authenticationManager;
+//    private final UserDetailsService userDetailsService;
 
-    public AuthenticationService(AuthenticationManager authenticationManager, UserDetailsService userDetailsService, JwtTokenProvider jwtTokenProvider) {
-        this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    MyUserDetailsService myUserDetailsService;
+
+//    public AuthenticationService(JwtTokenProvider jwtTokenProvider) {
+////        this.authenticationManager = authenticationManager;
+////        this.userDetailsService = userDetailsService;
+//        this.jwtTokenProvider = jwtTokenProvider;
+//    }
 
     public Map<String, String> authenticateUser(String username, String password) {
         // Authentication logic
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-        );
+//        Authentication authentication = authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(username, password)
+//        );
 
         // Generate access and refresh tokens with dynamically determined role
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = myUserDetailsService.loadUserByUsername(username);
         String accessToken = jwtTokenProvider.generateToken(userDetails.getUsername(),
                 userDetails.getAuthorities().iterator().next().getAuthority());
         String refreshToken = jwtTokenProvider.generateRefreshToken(userDetails.getUsername(),

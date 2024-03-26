@@ -18,7 +18,7 @@ public class AdminController {
     GroceryServiceImpl groceryService;
 
     @PostMapping("/add-item")
-    @PreAuthorize("haaRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> addItem(@RequestParam String name, @RequestParam Long quantity,
                                           @RequestParam Double price){
         Logging.getPostRequestUrl();
@@ -26,8 +26,17 @@ public class AdminController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/hello")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> testHello(){
+        Logging.getPostRequestUrl();
+        return new ResponseEntity<>("Hello", HttpStatus.OK);
+    }
+
     @PostMapping("/add-items")
     public ResponseEntity<String> addItems(@RequestBody ItemRequest itemRequest) {
         return null;
     }
+
+
 }

@@ -17,10 +17,10 @@ public class UserRole {
     private Long userRoleId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    @JoinColumn(name = "roleId", referencedColumnName = "roleId")
     private Role role;
 }
